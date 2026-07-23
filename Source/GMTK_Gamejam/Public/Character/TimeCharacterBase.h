@@ -12,6 +12,7 @@ class UGameplayAbility;
 class UTimeAbilitySystemComponent;
 class UTimeAttributeSet;
 class UGameplayEffect;
+class ATimeCharacterBase;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTimeCharacterDied, ATimeCharacterBase*, DeadCharacter);
 
@@ -35,8 +36,18 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+	void InitializeTime();
 	void AddCharacterAbilities();
 	virtual void InitAbilityActorInfo();
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Combat")
+	TObjectPtr<USkeletalMeshComponent> Weapon;
+
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	FName WeaponTipSocketName;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Time")
+	float InitialTime = 60.f;
 	
 	bool bIsDead = false;
 
@@ -51,6 +62,8 @@ protected:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Time")
 	TSubclassOf<UGameplayEffect> TimeDecayEffectClass;
+	
+	void StartTimeDecay();
 	
 
 	
